@@ -1,13 +1,20 @@
 <?php
-
-	require_once 'mailchimp/inc/MCAPI.class.php';
+    
 	// MailChimp API Key
 	// MailChimp API Key ARTICLE at http://kb.mailchimp.com/accounts/management/about-api-keys#Finding-or-generating-your-API-key
-	$api = new MCAPI('YOUR_API_KEY');
-	$merge_vars = array();
-
+	$api_key = 'YOUR_API_KEY';
+    
 	// MailChimp List ID
 	// MailChimp List ID ARTICLE at http://kb.mailchimp.com/lists/managing-subscribers/find-your-list-id
-	$retval = $api->listSubscribe( 'YOUR_LIST_ID', $_POST["subscribeemail"], $merge_vars, 'html', false, true );
-
+	$list_id = 'YOUR_LIST_ID';
+    
+	include('mailchimp/inc/MailChimp.php');
+	use \DrewM\MailChimp\MailChimp;
+	$MailChimp = new MailChimp($api_key);
+    
+	$result = $MailChimp->post("lists/$list_id/members", [
+        'email_address' => $_POST["subscribe-email"],
+        'status'        => 'subscribed'
+    ]);
+    
 ?>
